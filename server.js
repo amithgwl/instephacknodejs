@@ -48,10 +48,8 @@ var recipesModel = mongoose.model('recipesModel',recipesSchema);
 mongoose.connect('mongodb://admin:password123@ds235711.mlab.com:35711/instephack');
 
 app.get('/getproducts', cors(), function (req, res) {
-
-	//{'_id':'58e0e21af36d2878e036d74e'},
-	// console.log("id=" + req.param('name'))
-	productsModel.find(function (err, result) {
+	console.log(JSON.stringify(req.query));
+	productsModel.find({$and:[req.query]}, function (err, result) {
 		if (err) throw err;
 		if (result) {
 			res.json(result)
@@ -60,14 +58,11 @@ app.get('/getproducts', cors(), function (req, res) {
 				error: 'Error'
 			}))
 		}
-	})
+	}).sort({'rating':-1})
 })
 
 app.get('/getrecipes', cors(), function (req, res) {
-	
-		//{'_id':'58e0e21af36d2878e036d74e'},
-		// console.log("id=" + req.param('name'))
-		recipesModel.find(function (err, result) {
+		recipesModel.find({$and:[req.query]},function (err, result) {
 			if (err) throw err;
 			if (result) {
 				res.json(result)
@@ -76,53 +71,11 @@ app.get('/getrecipes', cors(), function (req, res) {
 					error: 'Error'
 				}))
 			}
-		})
+		}).sort({'rating':-1})
 	})
 
 
-// app.get('/getDetails', cors(), function (req, res) {
 
-// 	//{'_id':'58e0e21af36d2878e036d74e'},
-// 	// console.log("id=" + req.param('id'))
-// 	Model.find({ '_id': req.param('id') }, function (err, result) {
-// 		if (err) throw err;
-// 		if (result) {
-// 			res.json(result)
-// 		} else {
-// 			res.send(JSON.stringify({
-// 				error: 'Error'
-// 			}))
-// 		}
-// 	})
-// })
-
-
-
-// app.post('/save', cors(), function (req, res) {
-// 	Model.create({ name: req.param('name'), address: req.param('address'), description: req.param('description'), category: req.param('category') }, function (err, result) {
-// 		if (err) throw err;
-// 		if (result) {
-// 			res.json(result)
-// 		} else {
-// 			res.send(JSON.stringify({
-// 				error: 'Error'
-// 			}))
-// 		}
-// 	})
-// })
-
-// app.delete('/deleteProduct', cors(), function (req, res) {
-// 	Model.remove({ _id: req.param('id') }, function (err, result) {
-// 		if (result) {
-// 			res.json(result)
-// 		}
-// 		else {
-// 			res.send(JSON.stringify({
-// 				error: 'Error'
-// 			}))
-// 		}
-// 	});
-// })
 
 
 var port = process.env.PORT || 8080;
