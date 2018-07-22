@@ -101,7 +101,7 @@ app.post('/placeorder', cors(), function (req, res) {
 
 		// setup email data with unicode symbols
 		let mailOptions = {
-			from: '"teamenigma 👻" <teamenigma@gmail.com>', // sender address
+			from: '"teamenigma 👻" <amithnraus@gmail.com>', // sender address
 			to: 'amithnr@hotmail.com, amithnr@gmail.com, chetanniyan@gmail.com', // list of receivers
 			subject: 'Your order has been placed', // Subject line
 			text: 'Hello world?', // plain text body
