@@ -103,7 +103,7 @@ app.post('/placeorder', cors(), function (req, res) {
 		let mailOptions = {
 			from: '"teamenigma 👻" <teamenigma@gmail.com>', // sender address
 			to: 'amithnr@hotmail.com, amithnr@gmail.com, chetanniyan@gmail.com', // list of receivers
-			subject: 'Your order has been placed from voice assistant', // Subject line
+			subject: 'Your order has been placed', // Subject line
 			text: 'Hello world?', // plain text body
 			html: '<b>Hello world?</b>' // html body
 		};
