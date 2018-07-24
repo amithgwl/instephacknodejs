@@ -88,45 +88,49 @@ app.get('/getrecipes', cors(), function (req, res) {
 
 //placeOrder post api which sends email
 app.post('/placeorder', cors(), function (req, res) {
-	// 'use strict';
 
-// console.log(JSON.stringify(req.query));
-	// Generate test SMTP service account from ethereal.email
-	// Only needed if you don't have a real mail account for testing
-	nodemailer.createTestAccount((err, account) => {
-		// create reusable transporter object using the default SMTP transport
-		let transporter = nodemailer.createTransport({
-			host: 'smtp.gmail.com',
-			port: 587,
-			secure: false, // true for 465, false for other ports
-			auth: {
-				user: 'amithnraus@gmail.com', // generated ethereal user
-				pass: mypass // generated ethereal password
-			}
-		});
+	productsModel.find({ '_id': '5b4ded6ae7179a6b73f2f427'}, function (err, result) {
+		if (err) throw err;
+		if (result) {
+			nodemailer.createTestAccount((err, account) => {
+				let transporter = nodemailer.createTransport({
+					host: 'smtp.gmail.com',
+					port: 587,
+					secure: false,
+					auth: {
+						user: 'amithnraus@gmail.com', 
+						pass: mypass 
+					}
+				});
+		
+				let mailOptions = {
+					from: '"TeamEnigma - InStepHacks" <amithnraus@gmail.com>', // sender address
+					to: 'amithnr@hotmail.com, chetanniyan@gmail.com', // list of receivers 
+					subject: 'Your order has been placed. Please Review.', // Subject line
+					text: '', // plain text body
+					html: '<h2>InStepHacks Infosys</h2><br><h3>Product Details</h3><br><img src=\'https://res.cloudinary.com/driksqrrv/image/upload/v1531896133/1_lml1kg.jpg\' height=\'100\' width=\'100\'><br><b>color: </b> pink <br><b>Store: </b>amazon warehouse manhattan <br><b>Quantity: </b>3<br><b>Brand: </b>adidas'
+					};
+		
+				transporter.sendMail(mailOptions, (error, info) => {
+					if (error) {
+						return console.log(error);
+					}
+					res.send({
+						success: 'true',
+						message: 'Email Sent'
+					})
+				});
+			});
+		} else {
+			res.send(JSON.stringify({
+				error: 'Error'
+			}))
+		}
+	})
 
-		// setup email data with unicode symbols
-		let mailOptions = {
-			from: '"teamenigma 👻" <amithnraus@gmail.com>', // sender address
-			to: 'amithnr@hotmail.com', // list of receivers chetanniyan@gmail.com
-			subject: 'Your order has been placed', // Subject line
-			text: 'Hello world?', // plain text body
-			html: '<b>Hello world?</b>' // html body
-		};
 
-		// send mail with defined transport object
-		transporter.sendMail(mailOptions, (error, info) => {
-			if (error) {
-				return console.log(error);
-			}
-			console.log('Message sent: %s', info.messageId);
-			// Preview only available when sending through an Ethereal account
-			console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
-			// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-			// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-		});
-	});
+	
 })
 
 
