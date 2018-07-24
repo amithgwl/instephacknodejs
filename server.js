@@ -1,11 +1,17 @@
-var express = require('express');
-var cors = require('cors');
-var mongoose = require('mongoose');
-var nodemailer = require('nodemailer');
+const express = require('express'), 
+http = require('http'),
+cors = require('cors'),
+mongoose = require('mongoose'),
+nodemailer = require('nodemailer'),
+socketIo = require('socket.io'),
+app = express(),
+server = http.Server(app);
+
+
 var Schema = mongoose.Schema;
 var mypass='1si12mcA11!';
 
-var app = express();
+const io = socketIo(server);
 
 var productsSchema = new Schema({}, {
 	collection: 'products'
@@ -124,35 +130,36 @@ app.post('/placeorder', cors(), function (req, res) {
 })
 
 
+app.get('/getalexa', cors(), function (req, res) {
 
+	
+		io.emit('hello', req.param('url'));
+	
 
+})
 
-
-//end
-
-
-
-var port = process.env.PORT || 8080;
-app.listen(port, function () {
-	console.log('Node.js listening on port ' + port);
-});
 
 
 app.use(function (req, res, next) {
+	
+		// Website you wish to allow to connect
+		res.setHeader('Access-Control-Allow-Origin', '*');
+	
+		// Request methods you wish to allow
+		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+	
+		// Request headers you wish to allow
+		res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+	
+		// Set to true if you need the website to include cookies in the requests sent
+		// to the API (e.g. in case you use sessions)
+		res.setHeader('Access-Control-Allow-Credentials', true);
+	
+		// Pass to next layer of middleware
+		next();
+	});
 
-	// Website you wish to allow to connect
-	res.setHeader('Access-Control-Allow-Origin', '*');
 
-	// Request methods you wish to allow
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+app.get('/', (req, res) => res.send("Hello World"));
 
-	// Request headers you wish to allow
-	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-	// Set to true if you need the website to include cookies in the requests sent
-	// to the API (e.g. in case you use sessions)
-	res.setHeader('Access-Control-Allow-Credentials', true);
-
-	// Pass to next layer of middleware
-	next();
-});
+server.listen(8080);
