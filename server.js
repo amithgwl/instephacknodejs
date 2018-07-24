@@ -1,15 +1,15 @@
-const express = require('express'), 
-http = require('http'),
-cors = require('cors'),
-mongoose = require('mongoose'),
-nodemailer = require('nodemailer'),
-socketIo = require('socket.io'),
-app = express(),
-server = http.Server(app);
+const express = require('express'),
+	http = require('http'),
+	cors = require('cors'),
+	mongoose = require('mongoose'),
+	nodemailer = require('nodemailer'),
+	socketIo = require('socket.io'),
+	app = express(),
+	server = http.Server(app);
 
 
 var Schema = mongoose.Schema;
-var mypass='1si12mcA11!';
+var mypass = '1si12mcA11!';
 
 const io = socketIo(server);
 
@@ -89,8 +89,8 @@ app.get('/getrecipes', cors(), function (req, res) {
 //placeOrder post api which sends email
 app.post('/placeorder', cors(), function (req, res) {
 	// 'use strict';
-	
 
+// console.log(JSON.stringify(req.query));
 	// Generate test SMTP service account from ethereal.email
 	// Only needed if you don't have a real mail account for testing
 	nodemailer.createTestAccount((err, account) => {
@@ -108,7 +108,7 @@ app.post('/placeorder', cors(), function (req, res) {
 		// setup email data with unicode symbols
 		let mailOptions = {
 			from: '"teamenigma 👻" <amithnraus@gmail.com>', // sender address
-			to: 'amithnr@hotmail.com, amithnr@gmail.com, chetanniyan@gmail.com', // list of receivers
+			to: 'amithnr@hotmail.com', // list of receivers chetanniyan@gmail.com
 			subject: 'Your order has been placed', // Subject line
 			text: 'Hello world?', // plain text body
 			html: '<b>Hello world?</b>' // html body
@@ -131,35 +131,30 @@ app.post('/placeorder', cors(), function (req, res) {
 
 
 app.get('/getalexa', cors(), function (req, res) {
-
-	
-		io.emit('hello', req.param('url'));
-	
-
+	io.emit('alexacall', req.param('url'));
+	res.send({
+		success: 'true',
+		message: 'Please check you app'
+	})
 })
 
-
-
 app.use(function (req, res, next) {
-	
-		// Website you wish to allow to connect
-		res.setHeader('Access-Control-Allow-Origin', '*');
-	
-		// Request methods you wish to allow
-		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-	
-		// Request headers you wish to allow
-		res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-	
-		// Set to true if you need the website to include cookies in the requests sent
-		// to the API (e.g. in case you use sessions)
-		res.setHeader('Access-Control-Allow-Credentials', true);
-	
-		// Pass to next layer of middleware
-		next();
-	});
 
+	// Website you wish to allow to connect
+	res.setHeader('Access-Control-Allow-Origin', '*');
 
-app.get('/', (req, res) => res.send("Hello World"));
+	// Request methods you wish to allow
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+	// Request headers you wish to allow
+	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+	// Set to true if you need the website to include cookies in the requests sent
+	// to the API (e.g. in case you use sessions)
+	res.setHeader('Access-Control-Allow-Credentials', true);
+
+	// Pass to next layer of middleware
+	next();
+});
 
 server.listen(8080);
