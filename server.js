@@ -9,7 +9,7 @@ const express = require('express'),
 
 
 var Schema = mongoose.Schema;
-var mypass = '1si12mcA11!';
+var mypass = 'asfadf';
 
 const io = socketIo(server);
 
